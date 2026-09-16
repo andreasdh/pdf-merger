@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="nb">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Slå sammen og del opp PDF-er</title>
+<title>Merge and split PDFs</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" onerror="window.__pdflibFailed=true"></script>
 <style>
   :root{
@@ -144,7 +144,7 @@
   .mode-btn:hover{color:var(--ink)}
   .mode-btn.is-on{color:var(--ink);border-bottom-color:var(--pine)}
 
-  /* ---------- kildefil, metode, forhåndsvisning ---------- */
+  /* ---------- source file, method, preview ---------- */
   .card{
     display:flex;align-items:center;justify-content:space-between;gap:1rem;
     background:var(--sheet);border:1px solid var(--rule);border-left:3px solid var(--pine);
@@ -164,7 +164,7 @@
   .preview .idx{cursor:default}
   [hidden]{display:none !important}
 
-  /* vises bare der det finnes peker, eller bare på touch */
+  /* shown only where a pointer exists, or only on touch */
   .on-touch{display:none}
   @media (hover:none){
     .on-pointer{display:none}
@@ -179,7 +179,7 @@
     .field input{width:100%}
     .out{width:100%}
     .field{flex:1 1 10rem}
-    /* 16 px hindrer at iOS zoomer inn når feltet får fokus */
+    /* 16px keeps iOS from zooming in when a field takes focus */
     .range,.field input{font-size:1rem}
     .icon{width:2.4rem;height:2.4rem}
     .acts{gap:.25rem}
@@ -191,48 +191,48 @@
 </head>
 <body>
 <main>
-  <nav class="modes" aria-label="Velg oppgave">
-    <button type="button" class="mode-btn is-on" id="tab-merge" aria-pressed="true">Slå sammen</button>
-    <button type="button" class="mode-btn" id="tab-split" aria-pressed="false">Del opp</button>
+  <nav class="modes" aria-label="Choose task">
+    <button type="button" class="mode-btn is-on" id="tab-merge" aria-pressed="true">Merge</button>
+    <button type="button" class="mode-btn" id="tab-split" aria-pressed="false">Split</button>
   </nav>
 
-  <h1 id="title">Slå sammen PDF-er</h1>
-  <p class="lede" id="lede">Legg inn filene, sett rekkefølgen, last ned ett dokument. Alt skjer i nettleseren din. Ingen filer lastes opp noe sted.</p>
+  <h1 id="title">Merge PDFs</h1>
+  <p class="lede" id="lede">Add the files, set the order, download one document. Everything happens in your browser. No file is uploaded anywhere.</p>
 
-  <p class="offline" id="offline" hidden>Fikk ikke lastet PDF-biblioteket fra nettet. Koble til og last siden på nytt.</p>
+  <p class="offline" id="offline" hidden>Could not load the PDF library from the network. Reconnect and reload the page.</p>
 
   <section id="pane-merge">
   <div class="drop" id="drop">
-    <p class="drop-title"><span class="on-pointer">Slipp PDF-filer her</span><span class="on-touch">Legg til PDF-filer</span></p>
-    <p class="drop-sub on-pointer">eller</p>
-    <button type="button" class="btn ghost" id="pick">Velg filer</button>
+    <p class="drop-title"><span class="on-pointer">Drop PDF files here</span><span class="on-touch">Add PDF files</span></p>
+    <p class="drop-sub on-pointer">or</p>
+    <button type="button" class="btn ghost" id="pick">Choose files</button>
   </div>
 
   <ol class="list" id="list" hidden></ol>
 
   <div class="addmore" id="addmore" hidden>
-    <button type="button" class="btn ghost small" id="pick2">Legg til flere</button>
-    <button type="button" class="btn ghost small" id="clear">Tøm listen</button>
-    <span class="hint"><span class="on-pointer">Dra i sifferet til venstre for å endre rekkefølgen.</span><span class="on-touch">Bruk pilene til høyre for å endre rekkefølgen.</span> Feltet «Sider» tar for eksempel 1-3, 7, 10-.</span>
+    <button type="button" class="btn ghost small" id="pick2">Add more</button>
+    <button type="button" class="btn ghost small" id="clear">Clear list</button>
+    <span class="hint"><span class="on-pointer">Drag the number on the left to reorder.</span><span class="on-touch">Use the arrows on the right to reorder.</span> The "Pages" field takes for example 1-3, 7, 10-.</span>
   </div>
 
   <div class="bar" id="bar" hidden>
     <p class="total" id="total"></p>
     <div class="out">
       <span class="field">
-        <label for="fname">Navn på resultatet</label>
-        <input id="fname" type="text" value="sammenslatt.pdf" spellcheck="false">
+        <label for="fname">Result file name</label>
+        <input id="fname" type="text" value="merged.pdf" spellcheck="false">
       </span>
-      <button type="button" class="btn primary" id="merge">Slå sammen</button>
+      <button type="button" class="btn primary" id="merge">Merge files</button>
     </div>
   </div>
   </section>
 
   <section id="pane-split" hidden>
     <div class="drop" id="drop-split">
-      <p class="drop-title"><span class="on-pointer">Slipp en PDF her</span><span class="on-touch">Velg en PDF</span></p>
-      <p class="drop-sub on-pointer">eller</p>
-      <button type="button" class="btn ghost" id="pick-split">Velg fil</button>
+      <p class="drop-title"><span class="on-pointer">Drop a PDF here</span><span class="on-touch">Choose a PDF</span></p>
+      <p class="drop-sub on-pointer">or</p>
+      <button type="button" class="btn ghost" id="pick-split">Choose file</button>
     </div>
 
     <div class="card" id="srccard" hidden>
@@ -240,18 +240,18 @@
         <span class="fname" id="src-name"></span>
         <span class="fmeta" id="src-meta"></span>
       </span>
-      <button type="button" class="btn ghost small" id="swap">Bytt fil</button>
+      <button type="button" class="btn ghost small" id="swap">Change file</button>
     </div>
 
     <fieldset class="opts" id="opts" hidden>
-      <legend>Hvordan skal den deles?</legend>
-      <label class="opt"><input type="radio" name="how" value="each" checked><span>Én fil per side</span></label>
-      <label class="opt"><input type="radio" name="how" value="every"><span>Én fil for hver <input class="range num" id="every" type="number" min="1" step="1" value="10" inputmode="numeric"> sider</span></label>
-      <label class="opt"><input type="radio" name="how" value="ranges"><span>Egne sideområder <input class="range" id="ranges" type="text" placeholder="1-3, 4-8, 9-" spellcheck="false"></span></label>
-      <label class="opt"><input type="radio" name="how" value="extract"><span>Hent ut bare disse sidene <input class="range" id="extract" type="text" placeholder="2, 5-7" spellcheck="false"></span></label>
+      <legend>How should it be split?</legend>
+      <label class="opt"><input type="radio" name="how" value="each" checked><span>One file per page</span></label>
+      <label class="opt"><input type="radio" name="how" value="every"><span>One file for every <input class="range num" id="every" type="number" min="1" step="1" value="10" inputmode="numeric"> pages</span></label>
+      <label class="opt"><input type="radio" name="how" value="ranges"><span>Custom page ranges <input class="range" id="ranges" type="text" placeholder="1-3, 4-8, 9-" spellcheck="false"></span></label>
+      <label class="opt"><input type="radio" name="how" value="extract"><span>Extract only these pages <input class="range" id="extract" type="text" placeholder="2, 5-7" spellcheck="false"></span></label>
     </fieldset>
 
-    <h2 class="sub" id="sub-preview" hidden>Dette blir resultatet</h2>
+    <h2 class="sub" id="sub-preview" hidden>This is what you get</h2>
     <ol class="list preview" id="preview" hidden></ol>
     <p class="hint" id="more"></p>
 
@@ -259,10 +259,10 @@
       <p class="total" id="total-split"></p>
       <div class="out">
         <span class="field">
-          <label for="sname">Navn på delene</label>
+          <label for="sname">Name for the parts</label>
           <input id="sname" type="text" spellcheck="false">
         </span>
-        <button type="button" class="btn primary" id="split">Del opp</button>
+        <button type="button" class="btn primary" id="split">Split file</button>
       </div>
     </div>
   </section>
@@ -279,11 +279,11 @@
   var statusEl = $('status'), totalEl = $('total'), inputEl = $('input'), nameEl = $('fname');
   var mergeBtn = $('merge');
 
-  var items = [];      // sammenslåing: { id, name, size, bytes, pageCount, error }
+  var items = [];      // merge: { id, name, size, bytes, pageCount, error }
   var uid = 0;
   var busy = false;
   var dragId = null;
-  var mode = 'merge';  // 'merge' eller 'split'
+  var mode = 'merge';  // 'merge' or 'split'
 
   if (window.__pdflibFailed) $('offline').hidden = false;
   function engine(){ return window.PDFLib && window.PDFLib.PDFDocument; }
@@ -296,11 +296,11 @@
   function fmtSize(b){
     if (b < 1024) return b + ' B';
     if (b < 1048576) return Math.round(b / 1024) + ' kB';
-    return (b / 1048576).toFixed(1).replace('.', ',') + ' MB';
+    return (b / 1048576).toFixed(1) + ' MB';
   }
   function plural(n, one, many){ return n + ' ' + (n === 1 ? one : many); }
 
-  // "1-3, 7, 10-" -> [1,2,3,7,10,...]. Tomt felt betyr alle sider.
+  // "1-3, 7, 10-" -> [1,2,3,7,10,...]. An empty field means every page.
   function parseRange(spec, pageCount){
     if (!spec || !spec.trim()) return null;
     var parts = spec.split(','), out = [], i, m, a, b, p, k;
@@ -317,13 +317,13 @@
         else { for (k = a; k >= b; k--) out.push(k); }
         continue;
       }
-      throw new Error('forstår ikke «' + p + '»');
+      throw new Error('cannot read "' + p + '"');
     }
     out = out.filter(function(n){ return n >= 1 && n <= pageCount; });
-    if (!out.length) throw new Error('ingen sider i det området');
+    if (!out.length) throw new Error('no pages in that range');
     return out;
   }
-  // "1-3, 4-8, 9-" -> [[1,2,3],[4,5,6,7,8],[9,...]]. Hver gruppe blir én fil.
+  // "1-3, 4-8, 9-" -> [[1,2,3],[4,5,6,7,8],[9,...]]. Each group becomes one file.
   function parseGroups(spec, pageCount){
     var groups = [];
     (spec || '').split(',').forEach(function(p){
@@ -335,7 +335,7 @@
   function isPdf(f){ return /\.pdf$/i.test(f.name) || f.type === 'application/pdf'; }
   function breathe(){ return new Promise(function(r){ setTimeout(r, 0); }); }
 
-  /* ---------- zip uten komprimering (PDF-data er alt komprimert) ---------- */
+  /* ---------- zip with no compression (PDF data is already compressed) ---------- */
   var crcTable = null;
   function crc32(buf){
     var n, k, c, i;
@@ -364,8 +364,8 @@
       var lh = new Uint8Array(30 + name.length), l = new DataView(lh.buffer);
       l.setUint32(0, 0x04034b50, true);
       l.setUint16(4, 20, true);
-      l.setUint16(6, 0x0800, true);   // navn i UTF-8
-      l.setUint16(8, 0, true);        // lagret, ikke komprimert
+      l.setUint16(6, 0x0800, true);   // names in UTF-8
+      l.setUint16(8, 0, true);        // stored, not compressed
       l.setUint16(10, time, true);
       l.setUint16(12, date, true);
       l.setUint32(14, crc, true);
@@ -431,7 +431,7 @@
       idx.className = 'idx';
       idx.textContent = String(i + 1);
       idx.draggable = true;
-      idx.title = 'Dra for å flytte';
+      idx.title = 'Drag to move';
       li.appendChild(idx);
 
       var meta = document.createElement('div');
@@ -442,10 +442,10 @@
       nm.title = item.name;
       var sub = document.createElement('span');
       sub.className = 'fmeta';
-      if (res.pending) sub.textContent = 'leser filen';
+      if (res.pending) sub.textContent = 'reading the file';
       else if (res.err) sub.textContent = res.err;
-      else sub.textContent = plural(item.pageCount, 'side', 'sider') + ', ' + fmtSize(item.size)
-           + (res.n !== item.pageCount ? ' (bruker ' + plural(res.n, 'side', 'sider') + ')' : '');
+      else sub.textContent = plural(item.pageCount, 'page', 'pages') + ', ' + fmtSize(item.size)
+           + (res.n !== item.pageCount ? ' (using ' + plural(res.n, 'page', 'pages') + ')' : '');
       meta.appendChild(nm); meta.appendChild(sub);
       li.appendChild(meta);
 
@@ -453,14 +453,14 @@
       pg.className = 'pages';
       if (!res.err && !res.pending){
         var lab = document.createElement('label');
-        lab.textContent = 'Sider';
+        lab.textContent = 'Pages';
         lab.htmlFor = 'r' + item.id;
         var inp = document.createElement('input');
         inp.className = 'range';
         inp.id = 'r' + item.id;
         inp.type = 'text';
         inp.value = item.range;
-        inp.placeholder = 'alle';
+        inp.placeholder = 'all';
         inp.spellcheck = false;
         inp.addEventListener('input', function(){
           item.range = inp.value;
@@ -474,12 +474,12 @@
 
       var acts = document.createElement('div');
       acts.className = 'acts';
-      acts.appendChild(iconBtn('\u2191', 'Flytt ' + item.name + ' opp', i === 0, function(){ move(i, i - 1); }));
-      acts.appendChild(iconBtn('\u2193', 'Flytt ' + item.name + ' ned', i === items.length - 1, function(){ move(i, i + 1); }));
-      var del = iconBtn('\u2715', 'Fjern ' + item.name, false, function(){
+      acts.appendChild(iconBtn('\u2191', 'Move ' + item.name + ' up', i === 0, function(){ move(i, i - 1); }));
+      acts.appendChild(iconBtn('\u2193', 'Move ' + item.name + ' down', i === items.length - 1, function(){ move(i, i + 1); }));
+      var del = iconBtn('\u2715', 'Remove ' + item.name, false, function(){
         items.splice(i, 1);
         render();
-        say(item.name + ' er fjernet.');
+        say(item.name + ' removed.');
       });
       del.classList.add('del');
       acts.appendChild(del);
@@ -515,11 +515,11 @@
       if (r.err){ bad++; return; }
       pages += r.n; ok++;
     });
-    var text = plural(pages, 'side', 'sider') + ' fra ' + plural(ok, 'fil', 'filer');
+    var text = plural(pages, 'page', 'pages') + ' from ' + plural(ok, 'file', 'files');
     totalEl.textContent = text;
     if (bad){
       var em = document.createElement('em');
-      em.textContent = '  ' + plural(bad, 'fil', 'filer') + ' kan ikke brukes';
+      em.textContent = '  ' + plural(bad, 'file', 'files') + ' cannot be used';
       totalEl.appendChild(em);
     }
     mergeBtn.disabled = busy || pages === 0 || pending > 0;
@@ -540,11 +540,11 @@
     var pdfs = all.filter(function(f){ return /\.pdf$/i.test(f.name) || f.type === 'application/pdf'; });
     var skipped = all.length - pdfs.length;
     if (!pdfs.length){
-      say(skipped ? 'Bare PDF-filer kan slås sammen.' : 'Ingen filer å legge til.', true);
+      say(skipped ? 'Only PDF files can be merged.' : 'No files to add.', true);
       return;
     }
     if (!engine()){
-      say('PDF-biblioteket er ikke lastet. Last siden på nytt.', true);
+      say('The PDF library is not loaded. Reload the page.', true);
       return;
     }
     say('');
@@ -558,30 +558,30 @@
           item.pageCount = doc.getPageCount();
         });
       }).catch(function(){
-        item.error = 'kunne ikke leses som PDF';
+        item.error = 'could not be read as a PDF';
       }).then(render);
     });
     render();
-    if (skipped) say(plural(skipped, 'fil', 'filer') + ' ble hoppet over. Bare PDF-filer kan slås sammen.', true);
+    if (skipped) say(plural(skipped, 'file', 'files') + ' skipped. Only PDF files can be merged.', true);
   }
 
   /* ---------- merging ---------- */
   function outName(){
-    var n = nameEl.value.trim() || 'sammenslatt.pdf';
+    var n = nameEl.value.trim() || 'merged.pdf';
     if (!/\.pdf$/i.test(n)) n += '.pdf';
     return n;
   }
 
   function merge(){
     if (busy) return;
-    if (!engine()){ say('PDF-biblioteket er ikke lastet. Last siden på nytt.', true); return; }
+    if (!engine()){ say('The PDF library is not loaded. Reload the page.', true); return; }
     var usable = items.filter(function(it){ return it.bytes && !pagesOf(it).err; });
-    if (!usable.length){ say('Legg til minst én lesbar PDF først.', true); return; }
+    if (!usable.length){ say('Add at least one readable PDF first.', true); return; }
 
     busy = true;
     mergeBtn.disabled = true;
-    mergeBtn.textContent = 'Slår sammen';
-    say('Slår sammen ' + plural(usable.length, 'fil', 'filer') + '.');
+    mergeBtn.textContent = 'Merging';
+    say('Merging ' + plural(usable.length, 'file', 'files') + '.');
 
     var PDFDocument = window.PDFLib.PDFDocument;
     PDFDocument.create().then(function(out){
@@ -602,14 +602,14 @@
         return out.save().then(function(bytes){
           var name = outName();
           download(bytes, name);
-          say('Slått sammen. ' + plural(count, 'side', 'sider') + ' lagret som ' + name + '.');
+          say('Merged. ' + plural(count, 'page', 'pages') + ' saved as ' + name + '.');
         });
       });
     }).catch(function(e){
-      say('Sammenslåingen stoppet: ' + (e && e.message ? e.message : 'ukjent feil') + '. Prøv å fjerne den siste filen du la til.', true);
+      say('Merge stopped: ' + (e && e.message ? e.message : 'unknown error') + '. Try removing the last file you added.', true);
     }).then(function(){
       busy = false;
-      mergeBtn.textContent = 'Slå sammen';
+      mergeBtn.textContent = 'Merge files';
       updateBar();
     });
   }
@@ -629,14 +629,14 @@
     setTimeout(function(){ URL.revokeObjectURL(url); }, 5000);
   }
 
-  /* ---------- modusbytte ---------- */
+  /* ---------- mode switch ---------- */
   var titleEl = $('title'), ledeEl = $('lede');
   var paneMerge = $('pane-merge'), paneSplit = $('pane-split');
   var tabs = { merge: $('tab-merge'), split: $('tab-split') };
-  var TITLE = { merge: 'Slå sammen PDF-er', split: 'Del opp en PDF' };
+  var TITLE = { merge: 'Merge PDFs', split: 'Split a PDF' };
   var LEDE = {
-    merge: 'Legg inn filene, sett rekkefølgen, last ned ett dokument. Alt skjer i nettleseren din. Ingen filer lastes opp noe sted.',
-    split: 'Velg én PDF, bestem hvor den skal deles, last ned delene. Blir det flere deler, kommer de samlet i en zip-fil.'
+    merge: 'Add the files, set the order, download one document. Everything happens in your browser. No file is uploaded anywhere.',
+    split: 'Choose one PDF, decide where it should be split, download the parts. Several parts arrive together in a zip file.'
   };
   function setMode(m){
     if (busy) return;
@@ -655,25 +655,25 @@
   tabs.merge.addEventListener('click', function(){ setMode('merge'); });
   tabs.split.addEventListener('click', function(){ setMode('split'); });
 
-  /* ---------- dele opp ---------- */
+  /* ---------- splitting ---------- */
   var cardEl = $('srccard'), srcNameEl = $('src-name'), srcMetaEl = $('src-meta');
   var dropSplit = $('drop-split'), optsEl = $('opts');
   var everyEl = $('every'), rangesEl = $('ranges'), extractEl = $('extract');
   var previewEl = $('preview'), subEl = $('sub-preview'), moreEl = $('more');
   var barSplit = $('bar-split'), totalSplit = $('total-split');
   var snameEl = $('sname'), splitBtn = $('split');
-  var srcDoc = null;   // pdf-lib-dokumentet
+  var srcDoc = null;   // the pdf-lib document
   var srcInfo = null;  // { name, size, pageCount }
   var how = 'each';
 
   function loadSource(fileList){
     var all = Array.prototype.slice.call(fileList || []);
     var pdfs = all.filter(isPdf);
-    if (!pdfs.length){ say('Velg en PDF-fil.', true); return; }
-    if (!engine()){ say('PDF-biblioteket er ikke lastet. Last siden på nytt.', true); return; }
+    if (!pdfs.length){ say('Choose a PDF file.', true); return; }
+    if (!engine()){ say('The PDF library is not loaded. Reload the page.', true); return; }
     var f = pdfs[0];
-    var extra = pdfs.length > 1 ? 'Bruker bare ' + f.name + '. Del opp én fil om gangen.' : '';
-    say('Leser ' + f.name + '.');
+    var extra = pdfs.length > 1 ? 'Using only ' + f.name + '. Split one file at a time.' : '';
+    say('Reading ' + f.name + '.');
     f.arrayBuffer().then(function(buf){
       return window.PDFLib.PDFDocument.load(new Uint8Array(buf), { ignoreEncryption: true });
     }).then(function(doc){
@@ -681,13 +681,13 @@
       srcInfo = { name: f.name, size: f.size, pageCount: doc.getPageCount() };
       snameEl.value = f.name.replace(/\.pdf$/i, '');
       renderSplit();
-      if (srcInfo.pageCount < 2) say(f.name + ' har bare én side, så det er ingenting å dele.', true);
+      if (srcInfo.pageCount < 2) say(f.name + ' has only one page, so there is nothing to split.', true);
       else say(extra);
     }).catch(function(){
       srcDoc = null;
       srcInfo = null;
       renderSplit();
-      say(f.name + ' kunne ikke leses som PDF.', true);
+      say(f.name + ' could not be read as a PDF.', true);
     });
   }
 
@@ -698,41 +698,41 @@
       for (i = 1; i <= total; i++) parts.push([i]);
     } else if (how === 'every'){
       var n = parseInt(everyEl.value, 10);
-      if (!(n >= 1)) return { parts: [], need: 'Skriv inn hvor mange sider hver del skal ha.' };
+      if (!(n >= 1)) return { parts: [], need: 'Enter how many pages each part should have.' };
       for (i = 1; i <= total; i += n){
         g = [];
         for (k = i; k < i + n && k <= total; k++) g.push(k);
         parts.push(g);
       }
     } else if (how === 'ranges'){
-      if (!rangesEl.value.trim()) return { parts: [], need: 'Skriv inn sideområdene, for eksempel 1-3, 4-8, 9-.' };
+      if (!rangesEl.value.trim()) return { parts: [], need: 'Enter the page ranges, for example 1-3, 4-8, 9-.' };
       try { parts = parseGroups(rangesEl.value, total); }
-      catch (e){ return { parts: [], err: 'Sideområdene: ' + e.message }; }
+      catch (e){ return { parts: [], err: 'Page ranges: ' + e.message }; }
     } else {
-      if (!extractEl.value.trim()) return { parts: [], need: 'Skriv inn hvilke sider du vil hente ut, for eksempel 2, 5-7.' };
+      if (!extractEl.value.trim()) return { parts: [], need: 'Enter which pages to extract, for example 2, 5-7.' };
       try { parts = [parseRange(extractEl.value, total)]; }
-      catch (e){ return { parts: [], err: 'Sidene: ' + e.message }; }
+      catch (e){ return { parts: [], err: 'Pages: ' + e.message }; }
     }
     return { parts: parts };
   }
 
   function pagesLabel(pages){
     var contiguous = pages.every(function(p, j){ return j === 0 || p === pages[j - 1] + 1; });
-    if (pages.length === 1) return 'side ' + pages[0];
-    if (contiguous) return 'side ' + pages[0] + ' til ' + pages[pages.length - 1];
+    if (pages.length === 1) return 'page ' + pages[0];
+    if (contiguous) return 'pages ' + pages[0] + ' to ' + pages[pages.length - 1];
     var shown = pages.slice(0, 8).join(', ');
-    return plural(pages.length, 'side', 'sider') + ': ' + shown + (pages.length > 8 ? ' ...' : '');
+    return plural(pages.length, 'page', 'pages') + ': ' + shown + (pages.length > 8 ? ' ...' : '');
   }
 
   function baseName(){
-    var n = (snameEl.value || '').trim() || (srcInfo ? srcInfo.name.replace(/\.pdf$/i, '') : 'del');
+    var n = (snameEl.value || '').trim() || (srcInfo ? srcInfo.name.replace(/\.pdf$/i, '') : 'part');
     return n.replace(/[\\/:*?"<>|]+/g, '-');
   }
   function partName(pages, i){
     var contiguous = pages.every(function(p, j){ return j === 0 || p === pages[j - 1] + 1; });
-    if (pages.length === 1) return baseName() + '-s' + pages[0] + '.pdf';
-    if (contiguous) return baseName() + '-s' + pages[0] + '-' + pages[pages.length - 1] + '.pdf';
-    return baseName() + '-del' + (i + 1) + '.pdf';
+    if (pages.length === 1) return baseName() + '-p' + pages[0] + '.pdf';
+    if (contiguous) return baseName() + '-p' + pages[0] + '-' + pages[pages.length - 1] + '.pdf';
+    return baseName() + '-part' + (i + 1) + '.pdf';
   }
 
   function renderSplit(){
@@ -744,7 +744,7 @@
     if (has){
       srcNameEl.textContent = srcInfo.name;
       srcNameEl.title = srcInfo.name;
-      srcMetaEl.textContent = plural(srcInfo.pageCount, 'side', 'sider') + ', ' + fmtSize(srcInfo.size);
+      srcMetaEl.textContent = plural(srcInfo.pageCount, 'page', 'pages') + ', ' + fmtSize(srcInfo.size);
     }
     renderPreview();
   }
@@ -776,11 +776,11 @@
     var parts = plan.parts;
     var shown = Math.min(parts.length, 10), i;
     for (i = 0; i < shown; i++) previewEl.appendChild(previewRow(parts[i], i));
-    if (parts.length > shown) moreEl.textContent = 'og ' + plural(parts.length - shown, 'fil', 'filer') + ' til.';
+    if (parts.length > shown) moreEl.textContent = 'and ' + plural(parts.length - shown, 'file', 'files') + ' more.';
     previewEl.hidden = false;
     subEl.hidden = false;
     var pages = parts.reduce(function(a, g){ return a + g.length; }, 0);
-    totalSplit.textContent = plural(parts.length, 'fil', 'filer') + ', ' + plural(pages, 'side', 'sider') + ' i alt';
+    totalSplit.textContent = plural(parts.length, 'file', 'files') + ', ' + plural(pages, 'page', 'pages') + ' in total';
     splitBtn.disabled = busy;
   }
 
@@ -810,17 +810,17 @@
     var plan = splitPlan();
     if (plan.err || plan.need){ say(plan.err || plan.need, !!plan.err); return; }
     var parts = plan.parts;
-    if (!parts.length){ say('Ingenting å dele opp.', true); return; }
+    if (!parts.length){ say('Nothing to split.', true); return; }
 
     busy = true;
     splitBtn.disabled = true;
-    splitBtn.textContent = 'Deler opp';
+    splitBtn.textContent = 'Splitting';
     var PDFDocument = window.PDFLib.PDFDocument;
     var out = [];
     var chain = Promise.resolve();
     parts.forEach(function(pages, i){
       chain = chain.then(function(){
-        say('Lager fil ' + (i + 1) + ' av ' + parts.length + '.');
+        say('Creating file ' + (i + 1) + ' of ' + parts.length + '.');
         return breathe();
       }).then(function(){
         return PDFDocument.create();
@@ -836,17 +836,17 @@
     chain.then(function(){
       if (out.length === 1){
         download(out[0].bytes, out[0].name);
-        say('Delt opp. ' + out[0].name + ' er lastet ned.');
+        say('Split. ' + out[0].name + ' downloaded.');
       } else {
-        var zipName = baseName() + '-oppdelt.zip';
+        var zipName = baseName() + '-split.zip';
         downloadBlob(zipStore(out), zipName);
-        say('Delt opp. ' + plural(out.length, 'fil', 'filer') + ' lastet ned samlet i ' + zipName + '.');
+        say('Split. ' + plural(out.length, 'file', 'files') + ' downloaded together in ' + zipName + '.');
       }
     }).catch(function(e){
-      say('Oppdelingen stoppet: ' + (e && e.message ? e.message : 'ukjent feil') + '.', true);
+      say('Split stopped: ' + (e && e.message ? e.message : 'unknown error') + '.', true);
     }).then(function(){
       busy = false;
-      splitBtn.textContent = 'Del opp';
+      splitBtn.textContent = 'Split file';
       renderPreview();
     });
   }
@@ -886,7 +886,7 @@
   $('clear').addEventListener('click', function(){
     items = [];
     render();
-    say('Listen er tom.');
+    say('List cleared.');
   });
   inputEl.addEventListener('change', function(){
     if (mode === 'merge') addFiles(inputEl.files);
@@ -896,7 +896,7 @@
   mergeBtn.addEventListener('click', merge);
   nameEl.addEventListener('keydown', function(e){ if (e.key === 'Enter') merge(); });
 
-  // slipp filer hvor som helst i vinduet
+  // drop files anywhere in the window
   var depth = 0;
   window.addEventListener('dragenter', function(e){
     if (dragId !== null) return;
@@ -918,7 +918,7 @@
     }
   });
 
-  // dra rader for å sortere
+  // drag rows to reorder
   function clearMarks(){
     var rows = listEl.querySelectorAll('.row');
     for (var i = 0; i < rows.length; i++) rows[i].classList.remove('over-before', 'over-after');
